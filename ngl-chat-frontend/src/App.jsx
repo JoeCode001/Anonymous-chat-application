@@ -1,14 +1,12 @@
-
 import './App.css'
+import AppRouter from './router/router'
+import { AuthProvider } from './context/AuthProvider'  // adjust path if needed
 
 function App() {
-
   return (
-    <>
-       <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-    </>
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
   )
 }
 
