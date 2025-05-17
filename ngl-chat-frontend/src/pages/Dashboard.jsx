@@ -2,32 +2,30 @@ import { useEffect, useState } from 'react';
 import { FaMoon, FaSun, FaUser, FaChevronLeft, FaCopy, FaCheck } from 'react-icons/fa';
 import apiClient from '../api/apiClient';
 import formatTimeAgo from '../components/formatTimeAgo';
+import LoadingSpinner from '../components/LoadingSpinner';
 function Dashboard() {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [messages, setMessages] = useState([]);
     const [isCopied, setIsCopied] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [view, setView] = useState('messageList'); // messageList or messageDetail
     useEffect(() => {
         const fetchMessages = async () => {
+            setIsLoading(true)
             try {
                 const response = await apiClient.get('/messages');
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
+            }finally{
+                setIsLoading(false)
             }
         };
 
         fetchMessages();
     }, []);
 
-    // Mock messages data (would normally come from an API)
-    //   const [messages, setMessages] = useState([
-    //     { id: 1, text: "Hey, I really like your content! Keep it up!", read: false, timestamp: "2 hours ago" },
-    //     { id: 2, text: "Have you ever thought about trying something new? I think you'd be great at it.", read: true, timestamp: "5 hours ago" },
-    //     { id: 3, text: "I've been following your journey for a while now. It's inspiring to see how far you've come!", read: true, timestamp: "1 day ago" },
-    //     { id: 4, text: "Quick question - what's your favorite book? I'm looking for recommendations.", read: false, timestamp: "2 days ago" },
-    //   ]);
 
     // Generate user's unique link
     const uniqueLink = "https://anonymous-chat.example/user/username123";
@@ -127,45 +125,52 @@ function Dashboard() {
                     <>
                         <h2 className="text-lg font-semibold mb-4">Your Messages</h2>
 
-                        {messages.length === 0 ? (
-                            <div className={`p-6 ${cardBgColor} rounded-lg text-center shadow-sm border ${borderColor}`}>
-                                <p>You don't have any messages yet. Share your link to start receiving anonymous messages!</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-3">
-                                {messages.map(message => (
-                                    <div
-                                        key={message.id}
-                                        onClick={() => viewMessage(message)}
-                                        className={`p-4 ${cardBgColor} rounded-lg shadow-sm cursor-pointer border ${borderColor} flex items-center transition-all hover:shadow-md`}
-                                    >
-                                        <div className="rounded-full bg-purple-600 p-3 mr-4">
-                                            <FaUser size={24} className="text-white" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <div className="flex justify-between">
-                                                <div className="font-medium">Anonymous</div>
-                                                <div className="text-sm text-gray-500">{formatTimeAgo(message.created_at)}</div>
-                                            </div>
-                                            <div className="text-sm truncate mt-1">
-                                                {!message.is_read ? (
-                                                    <span className="font-semibold text-purple-600">You Just Received a new Message</span>
-                                                ) : (
-                                                    <>
-                                                        {message.content.substring(0, 60)}
-                                                        {message.content.length > 60 ? '...' : ''}
-                                                    </>
-                                                )}
-
-                                            </div>
-                                        </div>
-                                        {!message.is_read && (
-                                            <div className="w-3 h-3 rounded-full bg-purple-600 ml-2"></div>
-                                        )}
+                        {
+                            isLoading ? (
+                                <LoadingSpinner message="Fetching your messages..." /> 
+                            ) : (
+                                messages.length === 0 ? (
+                                    <div className={`p-6 ${cardBgColor} rounded-lg text-center shadow-sm border ${borderColor}`}>
+                                        <p>You don't have any messages yet. Share your link to start receiving anonymous messages!</p>
                                     </div>
-                                ))}
-                            </div>
-                        )}
+                                ) : (
+                                    <div className="space-y-3">
+                                        {messages.map(message => (
+                                            <div
+                                                key={message.id}
+                                                onClick={() => viewMessage(message)}
+                                                className={`p-4 ${cardBgColor} rounded-lg shadow-sm cursor-pointer border ${borderColor} flex items-center transition-all hover:shadow-md`}
+                                            >
+                                                <div className="rounded-full bg-purple-600 p-3 mr-4">
+                                                    <FaUser size={24} className="text-white" />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between">
+                                                        <div className="font-medium">Anonymous</div>
+                                                        <div className="text-sm text-gray-500">{formatTimeAgo(message.created_at)}</div>
+                                                    </div>
+                                                    <div className="text-sm truncate whitespace-normal mt-1">
+                                                        {!message.is_read ? (
+                                                            <span className="font-semibold text-purple-600">You Just Received a new Message</span>
+                                                        ) : (
+                                                            <>
+                                                                {message.content.substring(0, 60)}
+                                                                {message.content.length > 60 ? '...' : ''}
+                                                            </>
+                                                        )}
+
+                                                    </div>
+                                                </div>
+                                                {!message.is_read && (
+                                                    <div className="w-3 h-3 rounded-full bg-purple-600 ml-2"></div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )
+
+                            )
+                        }
                     </>
                 ) : (
                     // Message Detail View
