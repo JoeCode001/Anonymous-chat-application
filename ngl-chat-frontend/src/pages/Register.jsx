@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash, FaMoon, FaSun } from 'react-icons/fa';
 import apiClient from '../api/apiClient';
+import useAuth from '../context/useAuth';
 
 export default function RegistrationForm() {
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ export default function RegistrationForm() {
     password: '',
     password_confirmation: ''
   });
-  
+//   const { user, login, logout } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
