@@ -10,7 +10,7 @@ export default function RegistrationForm() {
     password: '',
     password_confirmation: ''
   });
-//   const { user, login, logout } = useAuth();
+  const {register} = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
