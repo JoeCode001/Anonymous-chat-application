@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import AuthContext from './AuthContext';
-import apiClient from '../api/apiClient';
+import apiClient, { setAuthToken } from '../api/apiClient';
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('authToken') || null);
@@ -10,16 +10,10 @@ export function AuthProvider({ children }) {
 
   // Set token in apiClient headers & localStorage whenever token changes
   useEffect(() => {
-    if (token) {
-      apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      localStorage.setItem('authToken', token);
-      fetchUser();
-    } else {
-      delete apiClient.defaults.headers.common['Authorization'];
-      localStorage.removeItem('authToken');
-      setUser(null);
-    }
+    setAuthToken(token);
+    if (token) fetchUser();
   }, [token]);
+  
 
   // Fetch user profile from API
   async function fetchUser() {
@@ -27,7 +21,7 @@ export function AuthProvider({ children }) {
       setLoading(true);
       setError(null);
       const response = await apiClient.get('/user');
-      setUser(response.data);
+      setUser(response.data.user);
     } catch (err) {
       console.error('Fetch user failed', err);
       setError('Failed to fetch user');
