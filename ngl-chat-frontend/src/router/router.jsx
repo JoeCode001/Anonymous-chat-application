@@ -4,13 +4,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 // import About from '../pages/About';
 import RegistrationForm from '../pages/Register';
 import Login from '../pages/Login'
-
+import Dashboard from '../pages/Dashboard';
 export default function AppRouter() {
   return (
       <Routes>
         <Route path="/" element={<h1>hi</h1>} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         {/* <Route path="/about" element={<About />} /> */}
       </Routes>
   );
