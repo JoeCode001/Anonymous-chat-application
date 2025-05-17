@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash, FaMoon, FaSun } from 'react-icons/fa';
 import useAuth from '../context/useAuth';
+import { useNavigate } from 'react-router-dom';
 function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const {login} = useAuth();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +32,7 @@ function Login() {
     try {
         await login(formData)
       setSuccess('Login successful!');
+      navigate('/dashboard');
       // Handle successful login (e.g., store token, redirect)
     } catch (err) {
       console.error('Login error:', err);

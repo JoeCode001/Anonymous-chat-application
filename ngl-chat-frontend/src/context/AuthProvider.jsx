@@ -1,20 +1,39 @@
 import React, { useState, useEffect } from 'react';
-
 import AuthContext from './AuthContext';
 import apiClient, { setAuthToken } from '../api/apiClient';
 
 export function AuthProvider({ children }) {
+  // Get both token and user from localStorage on initial load
   const [token, setToken] = useState(() => localStorage.getItem('authToken') || null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('authUser');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Set token in apiClient headers & localStorage whenever token changes
   useEffect(() => {
-    setAuthToken(token);
-    if (token) fetchUser();
+    if (token) {
+      localStorage.setItem('authToken', token);
+      setAuthToken(token);
+      // Only fetch user if we don't already have the user data
+      if (!user) fetchUser();
+    } else {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('authUser');
+      setAuthToken(null);
+    }
   }, [token]);
-  
+
+  // Store user in localStorage whenever it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('authUser', JSON.stringify(user));
+    } else if (user === null && localStorage.getItem('authUser')) {
+      localStorage.removeItem('authUser');
+    }
+  }, [user]);
 
   // Fetch user profile from API
   async function fetchUser() {
@@ -33,6 +52,11 @@ export function AuthProvider({ children }) {
     }
   }
 
+  // Force refresh user data from API
+  async function refreshUser() {
+    return fetchUser();
+  }
+
   // Register
   async function register(data) {
     setLoading(true);
@@ -41,6 +65,10 @@ export function AuthProvider({ children }) {
       const response = await apiClient.post('/register', data);
       if (response.data.token) {
         setToken(response.data.token);
+        // If user data is included in the response, set it directly
+        if (response.data.user) {
+          setUser(response.data.user);
+        }
       }
       return response;
     } catch (err) {
@@ -59,6 +87,10 @@ export function AuthProvider({ children }) {
       const response = await apiClient.post('/login', data);
       if (response.data.token) {
         setToken(response.data.token);
+        // If user data is included in the response, set it directly
+        if (response.data.user) {
+          setUser(response.data.user);
+        }
       }
       return response;
     } catch (err) {
@@ -75,18 +107,37 @@ export function AuthProvider({ children }) {
     setError(null);
     try {
       await apiClient.post('/logout');
+    } catch (err) {
+      console.error('Logout failed', err);
+      setError('Logout failed, but session cleared locally');
+    } finally {
+      // Always clear local data even if the API call fails
       setToken(null);
       setUser(null);
-    } catch (err) {
-      setError('Logout failed');
-      console.error(err);
-    } finally {
       setLoading(false);
     }
   }
 
+  useEffect(() => {
+    console.log('%c[Auth Debug]', 'color: green; font-weight: bold;');
+    console.log('Token:', token);
+    console.log('User:', user);
+  }, [token, user]);
+
+
+
   return (
-    <AuthContext.Provider value={{ token, user, loading, error, register, login, logout }}>
+    <AuthContext.Provider value={{ 
+      token, 
+      user, 
+      loading, 
+      error, 
+      register, 
+      login, 
+      logout,
+      refreshUser,
+      isAuthenticated: !!token && !!user
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,7 +7,13 @@ const apiClient = axios.create({
   },
 });
 
-// Optional helper if you want to set token manually outside React context
+// Auto-set token from localStorage on load
+const savedToken = localStorage.getItem('authToken');
+if (savedToken) {
+  apiClient.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+}
+
+// Optional helper to update token manually
 export function setAuthToken(token) {
   if (token) {
     apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
