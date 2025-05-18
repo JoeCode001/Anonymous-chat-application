@@ -46,7 +46,7 @@ function Dashboard() {
 
 
     // Generate user's unique link
-    const uniqueLink = `https://localhost:5173/user/${user.email}/${user.id}`;
+    const uniqueLink = `https://anonymous-chat-application-xi.vercel.app/user/${user.email}/${user.id}`;
 
     const toggleDarkMode = () => {
         setIsDarkMode(!isDarkMode);
