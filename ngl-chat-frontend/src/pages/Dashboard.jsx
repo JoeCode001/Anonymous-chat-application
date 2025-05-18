@@ -3,7 +3,9 @@ import { FaMoon, FaSun, FaUser, FaChevronLeft, FaCopy, FaCheck } from 'react-ico
 import apiClient from '../api/apiClient';
 import formatTimeAgo from '../components/formatTimeAgo';
 import LoadingSpinner from '../components/LoadingSpinner';
+import useAuth from '../context/useAuth';
 function Dashboard() {
+    const {user} = useAuth();
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -28,7 +30,7 @@ function Dashboard() {
 
 
     // Generate user's unique link
-    const uniqueLink = "https://anonymous-chat.example/user/username123";
+    const uniqueLink = `https://localhost:5173/user/${user.email}/${user.id}`;
 
     const toggleDarkMode = () => {
         setIsDarkMode(!isDarkMode);

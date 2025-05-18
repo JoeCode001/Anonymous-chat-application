@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RegistrationForm from '../pages/Register';
 import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard';
+import AnonymousMessagePage from '../pages/PublicMessage';
 export default function AppRouter() {
   return (
       <Routes>
@@ -12,6 +13,7 @@ export default function AppRouter() {
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/user/:email/:id" element={<AnonymousMessagePage />} />
         {/* <Route path="/about" element={<About />} /> */}
       </Routes>
   );
