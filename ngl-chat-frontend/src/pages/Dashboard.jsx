@@ -146,7 +146,7 @@ function Dashboard() {
                     <>
                         
 
-                        <div className="flex items-center">
+                        <div className="flex items-center justify-between ">
                         <h2 className="text-lg font-semibold mb-4">Your Messages</h2>
                             <button
                                 onClick={fetchMessages}
@@ -154,7 +154,7 @@ function Dashboard() {
                                 className="ml-4 p-2 rounded-full text-purple-600 hover:bg-gray-700 transition-colors"
                                 aria-label="Refresh messages"
                             >
-                                <FaRedo className={`${isLoading ? 'animate-spin' : ''}`} />
+                                <FaRedo className={`${isLoading ? 'animate-spin' : ''} text-2xl`} />
                             </button>
                         </div>
 
