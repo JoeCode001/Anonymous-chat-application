@@ -19,16 +19,27 @@ function Dashboard() {
             navigate('/login');
         }
         const fetchMessages = async () => {
-            setIsLoading(true)
+            setIsLoading(true);
             try {
-                const response = await apiClient.get('/messages');
-                setMessages(response.data);
+              const response = await apiClient.get('/messages');
+          
+              const result = response.data;
+          
+              // Safely check if result is an array
+              if (Array.isArray(result)) {
+                setMessages(result);
+              } else {
+                setMessages([]); // If no messages or invalid data
+              }
+          
             } catch (error) {
-                console.error('Error fetching messages:', error);
-            }finally{
-                setIsLoading(false)
+              console.error('Error fetching messages:', error);
+              setMessages([]); // Also handle error case safely
+            } finally {
+              setIsLoading(false);
             }
-        };
+          };
+          
 
         fetchMessages();
     }, [user]);
