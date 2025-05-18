@@ -42,24 +42,27 @@ function Dashboard() {
     };
 
     const viewMessage = async (message) => {
+        if (!message) return;
+      
         // Only update if it's not already read
         if (!message.is_read) {
-            try {
-                await apiClient.post(`/messages/${message.id}/read`); // Laravel route to mark as read
-
-                // Optimistically update local state
-                const updatedMessages = messages.map(msg =>
-                    msg.id === message.id ? { ...msg, is_read: true } : msg
-                );
-                setMessages(updatedMessages);
-            } catch (error) {
-                console.error('Failed to mark message as read:', error);
-            }
+          try {
+            await apiClient.post(`/messages/${message.id}/read`); // Laravel route to mark as read
+      
+            // Optimistically update local state
+            const updatedMessages = messages.map(msg =>
+              msg.id === message.id ? { ...msg, is_read: true } : msg
+            );
+            setMessages(updatedMessages);
+          } catch (error) {
+            console.error('Failed to mark message as read:', error);
+          }
         }
-
+      
         setSelectedMessage(message);
         setView('messageDetail');
-    };
+      };
+      
 
 
     const backToList = () => {
