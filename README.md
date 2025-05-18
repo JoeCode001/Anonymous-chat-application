@@ -70,5 +70,4 @@ A modern, responsive web application that allows users to receive anonymous mess
 
 ---
 
-## 📂 Project Structure
 
