@@ -18,32 +18,32 @@ function Dashboard() {
         if (user.id == null) {
             navigate('/login');
         }
-        const fetchMessages = async () => {
-            setIsLoading(true);
-            try {
-                const response = await apiClient.get('/messages');
-
-                const result = response.data;
-
-                // Safely check if result is an array
-                if (Array.isArray(result)) {
-                    setMessages(result);
-                } else {
-                    setMessages([]); // If no messages or invalid data
-                }
-
-            } catch (error) {
-                console.error('Error fetching messages:', error);
-                setMessages([]); // Also handle error case safely
-            } finally {
-                setIsLoading(false);
-            }
-        };
 
 
         fetchMessages();
-    }, [user]);
+    }, [user, navigate]);
 
+    const fetchMessages = async () => {
+        setIsLoading(true);
+        try {
+            const response = await apiClient.get('/messages');
+
+            const result = response.data;
+
+            // Safely check if result is an array
+            if (Array.isArray(result)) {
+                setMessages(result);
+            } else {
+                setMessages([]); // If no messages or invalid data
+            }
+
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+            setMessages([]); // Also handle error case safely
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     // Generate user's unique link
     const uniqueLink = `https://anonymous-chat-application-xi.vercel.app/user/${user.email}/${user.id}`;
@@ -144,7 +144,19 @@ function Dashboard() {
             <div className="container mx-auto p-4">
                 {view === 'messageList' ? (
                     <>
+                        
+
+                        <div className="flex items-center">
                         <h2 className="text-lg font-semibold mb-4">Your Messages</h2>
+                            <button
+                                onClick={fetchMessages}
+                                disabled={isLoading}
+                                className="ml-4 p-2 rounded-full text-purple-600 hover:bg-gray-700 transition-colors"
+                                aria-label="Refresh messages"
+                            >
+                                <FaRedo className={`${isLoading ? 'animate-spin' : ''}`} />
+                            </button>
+                        </div>
 
                         {
                             isLoading ? (
