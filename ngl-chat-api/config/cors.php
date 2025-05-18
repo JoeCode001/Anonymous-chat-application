@@ -6,7 +6,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://localhost:5173'], // Replace with your React app URL
+    'allowed_origins' => ['https://anonymous-chat-application-xi.vercel.app/'], // Replace with your React app URL
 
     'allowed_origins_patterns' => [],
 
