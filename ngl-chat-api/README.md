@@ -36,5 +36,5 @@ This is the **Laravel backend** for the Anonymous Messaging Platform. It handles
 
 ---
 
-## 📁 Project Structure
+
 
