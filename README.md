@@ -9,16 +9,22 @@ A modern, responsive web application that allows users to receive anonymous mess
 > Replace the image paths below with actual screenshots of your pages.
 
 - **Homepage**  
-  ![Homepage](screenshots/homepage.png)
+  ![Homepage](./readme-img/home.png)
+
+- **SignUp Page**  
+  ![Homepage](./readme-img/register.png)
+
+- **Login Page**  
+  ![Homepage](./readme-img/login.png)
 
 - **Anonymous Message Page**  
-  ![Send Message Page](screenshots/send-message.png)
+  ![Send Message Page](./readme-img/test-2.png)
 
 - **User Inbox (Message List)**  
-  ![Inbox](screenshots/inbox.png)
+  ![Inbox](./readme-img/test.png)
 
 - **Message Details View**  
-  ![Message Detail](screenshots/message-detail.png)
+  ![Message Detail](./readme-img/test-1.png)
 
 ---
 
@@ -26,7 +32,7 @@ A modern, responsive web application that allows users to receive anonymous mess
 
 ### 🔗 Shareable User Link
 - Unique user link:  
-  `https://localhost:5173/user/{email}/{id}`
+  `https://{domain}/user/{email}/{id}`
 - Visitors can send messages anonymously via this link.
 
 ### 📝 Anonymous Message Submission
