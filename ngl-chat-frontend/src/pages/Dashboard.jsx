@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FaMoon, FaSun, FaUser, FaChevronLeft, FaCopy, FaCheck } from 'react-icons/fa';
+import { FaMoon, FaSun, FaUser, FaChevronLeft, FaCopy, FaCheck, FaUserSecret } from 'react-icons/fa';
 import apiClient from '../api/apiClient';
 import formatTimeAgo from '../components/formatTimeAgo';
 import LoadingSpinner from '../components/LoadingSpinner';
 import useAuth from '../context/useAuth';
 import { useNavigate } from 'react-router-dom';
 function Dashboard() {
-    const {user} = useAuth();
+    const { user } = useAuth();
     const navigate = useNavigate();
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [selectedMessage, setSelectedMessage] = useState(null);
@@ -15,31 +15,31 @@ function Dashboard() {
     const [isLoading, setIsLoading] = useState(false);
     const [view, setView] = useState('messageList'); // messageList or messageDetail
     useEffect(() => {
-        if(user.id == null){
+        if (user.id == null) {
             navigate('/login');
         }
         const fetchMessages = async () => {
             setIsLoading(true);
             try {
-              const response = await apiClient.get('/messages');
-          
-              const result = response.data;
-          
-              // Safely check if result is an array
-              if (Array.isArray(result)) {
-                setMessages(result);
-              } else {
-                setMessages([]); // If no messages or invalid data
-              }
-          
+                const response = await apiClient.get('/messages');
+
+                const result = response.data;
+
+                // Safely check if result is an array
+                if (Array.isArray(result)) {
+                    setMessages(result);
+                } else {
+                    setMessages([]); // If no messages or invalid data
+                }
+
             } catch (error) {
-              console.error('Error fetching messages:', error);
-              setMessages([]); // Also handle error case safely
+                console.error('Error fetching messages:', error);
+                setMessages([]); // Also handle error case safely
             } finally {
-              setIsLoading(false);
+                setIsLoading(false);
             }
-          };
-          
+        };
+
 
         fetchMessages();
     }, [user]);
@@ -54,26 +54,26 @@ function Dashboard() {
 
     const viewMessage = async (message) => {
         if (!message) return;
-      
+
         // Only update if it's not already read
         if (!message.is_read) {
-          try {
-            await apiClient.post(`/messages/${message.id}/read`); // Laravel route to mark as read
-      
-            // Optimistically update local state
-            const updatedMessages = messages.map(msg =>
-              msg.id === message.id ? { ...msg, is_read: true } : msg
-            );
-            setMessages(updatedMessages);
-          } catch (error) {
-            console.error('Failed to mark message as read:', error);
-          }
+            try {
+                await apiClient.post(`/messages/${message.id}/read`); // Laravel route to mark as read
+
+                // Optimistically update local state
+                const updatedMessages = messages.map(msg =>
+                    msg.id === message.id ? { ...msg, is_read: true } : msg
+                );
+                setMessages(updatedMessages);
+            } catch (error) {
+                console.error('Failed to mark message as read:', error);
+            }
         }
-      
+
         setSelectedMessage(message);
         setView('messageDetail');
-      };
-      
+    };
+
 
 
     const backToList = () => {
@@ -148,11 +148,24 @@ function Dashboard() {
 
                         {
                             isLoading ? (
-                                <LoadingSpinner message="Fetching your messages..." /> 
+                                <LoadingSpinner message="Fetching your messages..." />
                             ) : (
                                 messages.length === 0 ? (
-                                    <div className={`p-6 ${cardBgColor} rounded-lg text-center shadow-sm border ${borderColor}`}>
-                                        <p>You don't have any messages yet. Share your link to start receiving anonymous messages!</p>
+                                    <div
+                                        className={`p-8 ${cardBgColor} rounded-2xl text-center shadow-md border-2 border-dashed ${borderColor} transition-all duration-300`}
+                                    >
+                                        <div className="flex justify-center mb-4">
+                                            <div className="bg-purple-600 p-4 rounded-full shadow-lg animate-pulse">
+                                                <FaUserSecret className="text-white text-3xl" />
+                                            </div>
+                                        </div>
+                                        <h3 className="text-lg font-semibold mb-2 text-purple-600">No Messages Yet</h3>
+                                        <p className={`${textColor} text-sm mb-4`}>
+                                            It looks like you haven't received any anonymous messages yet.
+                                        </p>
+                                        <p className="text-sm text-gray-500">
+                                            Share your unique link with friends to start receiving anonymous feedback!
+                                        </p>
                                     </div>
                                 ) : (
                                     <div className="space-y-3">
