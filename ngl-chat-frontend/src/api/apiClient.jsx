@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://65f1-102-90-47-23.ngrok-free.app/api',  // replace with your Laravel API URL
+  baseURL: 'https://4bd3-102-90-100-101.ngrok-free.app/api',  // replace with your Laravel API URL
   headers: {
     Accept: 'application/json',
   },
