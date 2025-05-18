@@ -6,10 +6,11 @@ import RegistrationForm from '../pages/Register';
 import Login from '../pages/Login'
 import Dashboard from '../pages/Dashboard';
 import AnonymousMessagePage from '../pages/PublicMessage';
+import HomePage from '../pages/Home';
 export default function AppRouter() {
   return (
       <Routes>
-        <Route path="/" element={<h1>hi</h1>} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegistrationForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />

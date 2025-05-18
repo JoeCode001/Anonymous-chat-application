@@ -4,8 +4,10 @@ import apiClient from '../api/apiClient';
 import formatTimeAgo from '../components/formatTimeAgo';
 import LoadingSpinner from '../components/LoadingSpinner';
 import useAuth from '../context/useAuth';
+import { useNavigate } from 'react-router-dom';
 function Dashboard() {
     const {user} = useAuth();
+    const navigate = useNavigate();
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -13,6 +15,9 @@ function Dashboard() {
     const [isLoading, setIsLoading] = useState(false);
     const [view, setView] = useState('messageList'); // messageList or messageDetail
     useEffect(() => {
+        if(user.id == null){
+            navigate('/login');
+        }
         const fetchMessages = async () => {
             setIsLoading(true)
             try {
@@ -26,7 +31,7 @@ function Dashboard() {
         };
 
         fetchMessages();
-    }, []);
+    }, [user]);
 
 
     // Generate user's unique link
