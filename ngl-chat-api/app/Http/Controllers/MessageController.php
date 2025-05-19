@@ -11,6 +11,7 @@ class MessageController extends Controller
     // View messages sent to the authenticated user
     public function index()
     {
+        
         $messages = Message::where('receiver_id', Auth::id())->latest()->get();
         return response()->json($messages);
     }

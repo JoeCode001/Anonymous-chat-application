@@ -25,7 +25,10 @@ function Dashboard() {
 
     const fetchMessages = async () => {
         setIsLoading(true);
+        console.log('Auth header:', apiClient.defaults.headers.common['Authorization']);
+
         try {
+
             const response = await apiClient.get('/messages');
 
             const result = response.data;

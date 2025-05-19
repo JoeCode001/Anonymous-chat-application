@@ -13,12 +13,14 @@ Route::get('/test', function () {
     return response()->json(['message' => 'API is working']);
 });
 
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 
 // Public: Send anonymous message
 Route::post('/messages', [MessageController::class, 'store']);
+// Route::get('/messages', [MessageController::class, 'index']); // no middleware
 
 // Protected: View or delete messages
 Route::middleware('auth:sanctum')->group(function () {
